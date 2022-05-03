@@ -13,7 +13,7 @@ private:
 
     void push(int val, Node*& node) {
         if (node == NULL) {
-            node = new Node;
+            node = new Node();
             node->val = val;
         } else
         if (val > node->val) {
