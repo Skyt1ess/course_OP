@@ -94,59 +94,59 @@ private:
     }
 
     Node* remove(int val, Node* node) {
-    if (node == NULL) {
+        if (node == NULL) {
+            return node;
+        }
+
+        if (val < node->val) {
+            node->left = remove(val, node->left);
+        }
+        else
+        if (val > node->val) {
+            node->right = remove(val, node->right);
+        }
+        else {
+            if ((node->left == NULL) || (node->right == NULL)) {
+                Node *temp = node->left ? node->left : node->right;
+                if (temp == NULL) {
+                    temp = node;
+                    node = NULL;
+                } else
+                *node = *temp;
+                delete temp;
+            } else {
+                Node *temp = nodeWithMimumValue(node->right);
+                node->val = temp->val;
+                node->right = remove(temp->val, node->right);
+            }
+        }
+
+        if (node == NULL) {
+            return node;
+        }
+
+
+        node->height = 1 + max(height(node->left),
+        height(node->right));
+        int balanceFactor = getBalanceFactor(node);
+        if (balanceFactor > 1) {
+            if (getBalanceFactor(node->left) >= 0) {
+                return rightRotate(node);
+            } else {
+                node->left = leftRotate(node->left);
+                return rightRotate(node);
+            }
+        }
+        if (balanceFactor < -1) {
+            if (getBalanceFactor(node->right) <= 0) {
+                return leftRotate(node);
+            } else {
+                node->right = rightRotate(node->right);
+                return leftRotate(node);
+            }
+        }
+
         return node;
-    }
-
-    if (val < node->val) {
-        node->left = remove(val, node->left);
-    }
-    else
-    if (val > node->val) {
-        node->right = remove(val, node->right);
-    }
-    else {
-        if ((node->left == NULL) || (node->right == NULL)) {
-            Node *temp = node->left ? node->left : node->right;
-            if (temp == NULL) {
-                temp = node;
-                node = NULL;
-            } else
-            *node = *temp;
-            delete temp;
-        } else {
-            Node *temp = nodeWithMimumValue(node->right);
-            node->val = temp->val;
-            node->right = remove(temp->val, node->right);
-        }
-    }
-
-    if (node == NULL) {
-        return node;
-    }
-
-
-    node->height = 1 + max(height(node->left),
-    height(node->right));
-    int balanceFactor = getBalanceFactor(node);
-    if (balanceFactor > 1) {
-        if (getBalanceFactor(node->left) >= 0) {
-            return rightRotate(node);
-        } else {
-            node->left = leftRotate(node->left);
-            return rightRotate(node);
-        }
-    }
-    if (balanceFactor < -1) {
-        if (getBalanceFactor(node->right) <= 0) {
-            return leftRotate(node);
-        } else {
-            node->right = rightRotate(node->right);
-            return leftRotate(node);
-        }
-    }
-
-    return node;
     }
 
     void print(Node* node, int cnt) {
