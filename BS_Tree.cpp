@@ -76,13 +76,17 @@ public:
         }
 
         Node* tmp = new Node();
+        bool is_root = false;
         if (del != head) {
             tmp = find_parent(del, head);
         } else {
-            tmp->left = del;
+            is_root = true;
         }
 
         if (del->left == NULL && del->right == NULL) {
+                if (is_root) {
+                    head = NULL;
+                } else
                 if (tmp->left == del) {
                     tmp->left = NULL;
                 } else {
@@ -91,6 +95,9 @@ public:
             delete del;
         } else
         if (del->left == NULL) {
+                if (is_root) {
+                    head = del->right;
+                } else
                 if (tmp->left == del) {
                     tmp->left = del->right;
                 } else {
@@ -99,6 +106,9 @@ public:
             delete del;
         } else
         if (del->right == NULL) {
+                if (is_root) {
+                    head = del->left;
+                } else
                 if (tmp->left == del) {
                     tmp->left = del->left;
                 } else {
