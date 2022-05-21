@@ -6,12 +6,12 @@ const int MaxN = 50005;
 
 int n, k;
 vector< vector<int> > g(MaxN);
-vector<int> done(MaxN, 0), child(MaxN, 0);
+vector<int> done(MaxN, 0), _size(MaxN, 0);
 long long Res = 0;
 
 void PdDFS(int u, int p)
 {
-    child[u] = 1;
+    _size[u] = 1;
     for (auto v : g[u])
     {
         if (done[v] == 1 || v == p )
@@ -19,7 +19,7 @@ void PdDFS(int u, int p)
             continue;
         }
         PdDFS(v, u);
-        child[u] = child[u] + child[v];
+        _size[u] = _size[u] + _size[v];
     }
 }
 
@@ -31,7 +31,7 @@ int findCen(int u, int p, int sz)
         {
             continue;
         }
-        if (child[v] * 2 >= sz)
+        if (_size[v] * 2 >= sz)
         {
             return findCen(v, u, sz);
         }
@@ -66,7 +66,7 @@ void DFS(int u, int p, int depth, vector<int> &cnt, int add)
 void Solve(int u, int p)
 {
     PdDFS(u, p);
-    int sz = child[u];
+    int sz = _size[u];
     u = findCen(u, p, sz);
     vector<int> cnt(k + 1, 0);
     cnt[0] = 1;
@@ -100,11 +100,11 @@ int main()
     for (int i = 1; i < n; i++)
     {
         cin >> u >> v;
-        g[u].push_back(v);
+        g[--u].push_back(--v);
         g[v].push_back(u);
     }
     Res = 0;
-    Solve(1, 1);
+    Solve(0, -1);
     cout << Res;
     return 0;
 }
